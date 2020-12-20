@@ -32,6 +32,8 @@
 
 
 \usetikzlibrary{calc}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
 
 
 %%%%%%%%%%
@@ -45,15 +47,16 @@
 \definecolor{sidecolor}{HTML}{E7E7E7}
 \definecolor{lightgray}{HTML}{999999}
 
-\definecolor{green}{HTML}{C2E15F}
-\definecolor{orange}{HTML}{FDA333}
+\definecolor{green}{HTML}{27B45E}
+\definecolor{orange}{HTML}{F7941D}
 \definecolor{purple}{HTML}{D3A4F9}
-\definecolor{red}{HTML}{FB0B00}
-\definecolor{blue}{HTML}{6CE0F1}
-\definecolor{mainblue}{HTML}{0E5484}
+\definecolor{red}{HTML}{EC1D26}
+\definecolor{blue}{HTML}{2DC3E0}
+\definecolor{maincolor}{HTML}{0E5484}
 \definecolor{cerulean}{HTML}{007BA7}
 \definecolor{maingray}{HTML}{B9B9B9}
 \definecolor{maindarkgray}{HTML}{B3B3B3}
+\definecolor{yellow}{HTML}{FFDB35}
 \ifdefined\@cv@print
   \colorlet{green}{gray}
   \colorlet{orange}{gray}
@@ -88,7 +91,7 @@
 \pgfmathsetlength{\imagescale}{\imagewidth/600}%
 
 
-\newcommand{\profilesection}[2]{{\noindent\color{black!80} \huge #1 \rule[0.15\baselineskip]{#2}{1pt} \vspace{1pt}}}
+\newcommand{\profilesection}[2]{{\noindent\color{black!80} \LARGE #1 \rule[0.15\baselineskip]{#2}{1pt} \vspace{1pt}}}
 
 
 \newcommand{\cvdate}[1]{\renewcommand{\givencvdate}{#1}}
@@ -114,7 +117,7 @@
 
 
 \newcommand*\icon[1]{\tikz[baseline=(char.base)]{
-            \node[shape=circle,draw,inner sep=1pt, fill=mainblue,mainblue,text=white] (char) {#1};}}
+            \node[shape=circle,draw,inner sep=1pt, fill=maincolor,maincolor,text=white] (char) {#1};}}
 \newcommand*\round[2]{%
   \tikz[baseline=(char.base)]\node[anchor=north west, draw,rectangle, rounded corners, inner sep=1.6pt, minimum size=5.5mm,
     text height=3.6mm,  fill=#2,#2,text=white](char){#1} ;}
@@ -127,7 +130,7 @@
 \foreach [count=\i] \x/\y in {#1}
 {
   \draw[fill=maingray,maingray] (0,-\i) rectangle (6,-\i+0.4);
-  \draw[fill=white,mainblue](0,-\i) rectangle (1.2*\y,-\i+0.4);
+  \draw[fill=white,maincolor](0,-\i) rectangle (1.2*\y,-\i+0.4);
   \node [above right ] at (0,-\i+0.4) {\x};
   \foreach \z in {0,1,2,...,10}
   {
@@ -142,16 +145,49 @@
 \end{tikzpicture}
 }
 }
+
 \newcommand{\givenskill}{}
 
-\newcommand\skillstext[1]{ 
+\newcommand\languages[1]{ 
+
+\renewcommand{\givenlanguage}{
+\noindent
+\begin{tikzpicture}
+\foreach [count=\i] \x/\y in {#1}
+{
+  \draw[fill=maingray,maingray] (0,-\i) rectangle (6,-\i+0.4);
+  \draw[fill=white,maincolor!60](0,-\i) rectangle (1.2*\y,-\i+0.4);
+  \node [above right ] at (0,-\i+0.4) {\x};
+  \foreach \z in {0,1,2,...,10}
+  {
+    \coordinate (A\z) at ($(0,-\i)+(1.2*\z*0.5cm,0)$) {};
+    \ifodd\z
+        \draw[white] ($(A\z)$) -- ($(A\z)+(0,2.5pt)$);
+    \else
+        \draw[white] ($(A\z)$) -- ($(A\z)+(0,5pt)$);
+    \fi
+  }
+}
+\end{tikzpicture}
+}
+}
+
+\newcommand{\givenlanguage}{}
+
+
+%INTERESTS
+
+\newtcbox{\mybox}[1][maincolor]{on line,
+    coltext=white, colback=#1, colframe=#1, boxsep=0pt, boxrule=0pt, size=small, arc=2mm}
+
+\newcommand\interests[1]{ 
 
 \renewcommand{\giventextskill}{
 \begin{flushleft}
 \noindent
-\foreach [count=\i] \x/\y in {#1}
+\foreach [count=\i] \x in {#1}
 { 
-\x$ \star $\y
+\mybox{\x}
 }
 \end{flushleft}
 }
@@ -180,7 +216,7 @@
         \node[anchor=north west, inner sep=0pt, outer sep=0pt] at (0,0) {\includegraphics[width=\imagewidth]{\givenprofilepic}};
 \end{tikzpicture}}
 
-{\Huge\color{mainblue}\givencvname}
+{\Huge\color{maincolor}\givencvname}
 
 \begin{flushright}
 {\Large\color{black!80}\givencvjobtitle}
@@ -195,25 +231,24 @@
 \end{tabular}
 
 
-\profilesection{About me}{3.2cm}
+\profilesection{About me}{3.3cm}
 \givenaboutme
 
 
-\profilesection{Skill}{5cm}
+\profilesection{Skills \& Competencies}{0cm}
 \givenskill
+
+\profilesection{Languages}{3.2cm}
+\givenlanguage
+\profilesection{Interests}{3.2cm}
 \giventextskill
 \noindent
 \scriptsize
 \noindent
-(*)[The skill scale is from 0 (Fundamental Awareness) to 6 (Expert).]
-
 \end{flushleft}
 \end{textblock}
 \vspace{-10pt}
- }
-
-
-
+}
 
 %%%%%%%%%%%%%%%%
 % Section Color box %
@@ -224,9 +259,9 @@
    \round{#1#2#3}{
       \ifcase\value{colorCounter}%
         maingray\or%
-        mainblue\or%
+        maincolor\or%
         maingray\or%
-        mainblue\else%
+        maincolor\else%
         maingray\fi%
     }%
   }%
@@ -329,6 +364,19 @@
       \parbox[t]{11.5cm}{%
     \textbf{#3}%
   }\\}
+
+\newtcbox{\toolbox}[1][maincolor]{on line,
+    coltext=#1, colback=maingray, colframe=maingray, boxsep=0pt, boxrule=0pt, size=small, arc=2mm}
+
+\newcommand\tools[1]{ 
+\begin{flushleft}
+\noindent
+\foreach [count=\i] \x in {#1}
+{ 
+\toolbox{\x}
+}
+\end{flushleft}
+}
 
 %%%%%%%%%%%%
 % Page Setting %
